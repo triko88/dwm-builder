@@ -1,7 +1,7 @@
 # dwm-builder
 A script to effortlessly fetch, patch and build suckless' dwm and dmenu using POSIX shell (for Linux and BSD).
 
-![][out.gif]
+![](out.gif)
 
 ## Install
 ### Dependencies
@@ -18,7 +18,7 @@ Run `./dwm-builder` or `sh ./dwm-builder` in terminal to run and follow the proc
 
 ## Extending the experience
 ### Flow Diagram (for nerds)
-![][flow-diagram.png]
+![](flow-diagram.png)
 
 ### Adding new patches
 To add/modify patches for **dmenu** and **dwm** in `dmenu-patches` and `dwm-patches` by adding or changing the URLs within the file. The purpose of these files is to simply store the URLs of the patches.
