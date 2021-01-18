@@ -1,0 +1,60 @@
+#!/bin/sh
+
+mass_patch () 
+{
+    n=$#
+    for ((i=2; i<=n; i++)); do
+        eval "patch -sd \$1 < \${$i}"
+    done
+}
+
+stp ()
+{
+    read -p "$1" checked
+
+    if [ "$checked" != "y" ]; then
+        echo "$2"
+        exit 0 > /dev/null # Silently kills the script
+    fi
+}
+
+author="Apan"
+pmt="('y' for yes)"
+bold=$(tput bold)
+norm=$(tput sgr0)
+
+echo "
+Welcome to $author's Suckless' dwm builder!
+Before we proceed to the installation, check if you have the following dependencies:
+$(< deps-msg)"
+
+stp "Have you checked these are installed $pmt? " "Okay, check dependencies before proceeding"
+
+echo; git clone https://git.suckless.org/dwm
+echo; git clone https://git.suckless.org/dmenu
+
+echo -ne "${bold}\nDownloading dwm patches... \t"
+wget -i dwm-patches -P patches/dwm -nc > /dev/null 2>&1; echo "Done"
+echo -ne "\nDownloading dmenu patches... \t"
+wget -i dmenu-patches -P patches/dmenu -nc > /dev/null 2>&1; echo "Done${norm}"
+
+stp "Do you apply patches right now $pmt? " "Okay, you can edit them before patching"
+
+echo -ne "\n\nApplying Patches for dwm... \t";
+mass_patch dwm patches/dwm/*; echo "${bold}Done${norm}"
+
+echo -ne "\n\nApplying Patches for dmenu... \t";
+mass_patch dmenu patches/dmenu/*; echo "${bold}Done${norm}"
+
+echo "${bold}Now Building dwm and dmenu...${norm}"
+
+if test -f /etc/sudoers; then
+    sudo make -C dwm clean install; sudo make -C dmenu clean install
+elif test -f /etc/doas.conf; then
+    echo "So, you're from ${bold}DOAS MASTER-RACE...${norm}"
+    stp "Is nopass enabled for this user $pmt? " "Add permit ${bold}permit nopass 'username' as root${norm} in ${bold}/etc/doas.conf${norm} before you proceed."
+
+    doas make -C dwm clean install; doas make -C dmenu clean install
+else
+    echo "It seems you're a ${bold}GIGA-CHAD!${norm} Go to super mode with ${bold}su${norm} and compile both dwm and demu with ${bold}make -C dmenu clean install${norm} and ${bold}make -C dwm clean install${norm} in ${bold} $PWD ${norm}"
+fi

@@ -1,0 +1,10 @@
+For building,
+    1. Git
+    2. Make
+    3. Wget
+
+For patches,
+    1. fontconfig
+    2. libX11
+    3. libXft
+    4. Xinerama and libXinerama (for multimonitor support)
