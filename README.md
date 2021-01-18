@@ -11,6 +11,7 @@ A script to effortlessly fetch, patch and build suckless' dwm and dmenu using PO
 - wget
 - fontconfig
 - libX11
+- libXft
 - Xinerama and libXinerama (for multimonitor support)
 
 ### Process
